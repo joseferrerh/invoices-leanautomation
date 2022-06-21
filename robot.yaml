@@ -1,0 +1,24 @@
+tasks:
+  Invoices From Email:
+    robotTaskName: Read Invoices from Email
+  Invoices From Folder:
+    robotTaskName: Read Invoices from Folder
+  Invoices From AirTable:
+    robotTaskName: Read Invoices from AirTable
+  Update DocumentID in AirTable:
+    robotTaskName: Invoices Update DocumentID in AirTable
+  Update Document Details in AirTable:
+    robotTaskName: Invoices Update Document Details in AirTable
+  API Send Invoice:
+    robotTaskName: Send Invoice to docDigit
+  API Get Details:
+    robotTaskName: Get Details from docDigit Invoice
+
+
+
+artifactsDir: output
+condaConfigFile: conda.yaml
+ignoreFiles: [.gitignore]
+
+PATH: [., libraries]
+PYTHONPATH: [., libraries, resources]
