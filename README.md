@@ -7,7 +7,7 @@ This project provides support for docDigitizer webService, in order to:
   - query docDigitizer to obtain the documentID related to the taskID
   - query again docDigitizer to obtain the document Details
 
-Ivoices are also saved and registered into an AirTable repository.
+Invoices are also saved and registered into an AirTable repository.
 
 ## Requirements
 
