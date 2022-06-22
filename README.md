@@ -1,4 +1,4 @@
-# Robocorp project to deal with invoices, send them to docDigitizer, obtain the data from their webserice and save it into an AirTable repository
+# Robocorp project to deal with invoices, send them to docDigitizer, obtain the data from their webservice and save it into an AirTable repository
 
 This project provides support for docDigitizer webService, in order to:
 
