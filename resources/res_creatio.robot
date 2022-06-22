@@ -10,6 +10,5 @@ ${CREATIOINV_API_URL}       /InvoiceResponse
 
 *** Keywords ***
 Create Session Creatio
-    #&{headers}=    Create Dictionary    Authorization=Bearer keySSjoVV4iU74779
     Create Session    creatio    ${CREATIO_API_BASE_URL}    verify=True
 
