@@ -1,5 +1,5 @@
 *** Settings ***
-Documentation     Lee las facturas de una carpeta o folder y las envia a docdigitizer y airtable
+Documentation     This robot reads the files in a folder and sends them to DocDigitizer to obtain the relevant data
 Library           RPA.HTTP
 Library           RPA.core.notebook
 Library           RPA.JSON
@@ -7,11 +7,8 @@ Library           RPA.FileSystem
 Library           OperatingSystem
 Library           String
 Library           Collections
-Library           docdigi_post_request
 Resource          res_airtable.robot
 Resource          res_docdigitizer.robot
-#Suite Setup       Setup
-#Suite Teardown    Teardown
 
 *** Variables ***
 ${INVOICES_DIR}        ${CURDIR}${/}%{INVOICES_DIR}
@@ -21,6 +18,9 @@ ${INVOICES_DIR}        ${CURDIR}${/}%{INVOICES_DIR}
 Read Invoices from Folder
     Create Session Airtable
     Create Session DocDigitizer
+
+    ${secret}        Get Secret    AirTable
+    ${API_URL}=    Set Variable    ${secret}[API_URL]
 
     Log To Console    ${INVOICES_DIR}
 
@@ -57,7 +57,7 @@ Read Invoices from Folder
 #        Log    ${respDocument}[id]
 #        Log    ${respDocument}[annotations][data]
 
-        ${resp}    Insert into Airtable    ${file}[1]    ${task}[id]    ${EMPTY}    ${EMPTY}
+        ${resp}    Insert into Airtable    ${API_URL}    ${file}[1]    ${task}[id]    ${EMPTY}    ${EMPTY}
         #${jsondata}=    Set Variable    ${resp.json()}
         Log    ${resp}
 

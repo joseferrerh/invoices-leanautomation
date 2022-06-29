@@ -1,5 +1,5 @@
 *** Settings ***
-Documentation     Lee las facturas de una carpeta o folder y las envia a docdigitizer y airtable
+Documentation     This robot accesses a mailbox, reads emails with a subject including the word "Invoice", and then downloads the attachments to the previous folder.
 Library           RPA.Email.ImapSmtp
 Library           RPA.FileSystem
 Library           String

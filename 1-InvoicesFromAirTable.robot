@@ -1,5 +1,6 @@
 *** Settings ***
-Documentation     Lee las facturas de una carpeta o folder y las envia a docdigitizer y airtable
+Documentation     Use this task if your users upload invoices directly to Airtable.
+...               Those invoices are retrieved from Airtable, the PDF file is downloaded, and a request with that invoice file is then sent to DocDigitizer.
 Library           RPA.HTTP
 Library           RPA.core.notebook
 Library           RPA.JSON
@@ -7,7 +8,6 @@ Library           RPA.FileSystem
 Library           OperatingSystem
 Library           String
 Library           Collections
-Library           docdigi_post_request
 Resource          res_airtable.robot
 Resource          res_docdigitizer.robot
 #Suite Setup       Setup
@@ -23,7 +23,7 @@ Read Invoices from AirTable
     # Query the New invoices in AirTable
     # Those invoices has been manually uploaded by the user 
 
-    #${resp}     Get Request     airtable    ${API_URL}?maxRecords=100&filterByFormula=Status%3D"Todo"&sort%5B0%5D%5Bfield%5D=invoiceName
+    # ${resp}     Get Request     airtable    ${API_URL}?maxRecords=100&filterByFormula=Status%3D"Todo"&sort%5B0%5D%5Bfield%5D=invoiceName
     &{params}=    Create Dictionary
     ...    maxRecords=100
     ...    filterByFormula=Status="Todo"
@@ -42,25 +42,24 @@ Read Invoices from AirTable
     ${contador}     Get Length   ${all_invoices}
 
     FOR  ${invoice}    IN    @{invoices}
-        #[Tags]    post
-        # Obtenemos el Attachment del registro de AirTable
-        # y lo enviamos a docDigitizer
+        # [Tags]    post
+        # Get the attachment file from Airtable
+        # Send it to docDigitizer
         ${idAirTable}     Set Variable    ${invoice}[id]
         ${invoiceName}    Get Attachment    ${invoice}
         Log    ${invoiceName}
 
-        #${resp}    Send to DocDigitizer    ${invoiceName}
-        # Esto es solo para probar sin enviar a DocDigitizer
-        # Respuesta ficticia para probar el flujo completo
-        ${resp}    Convert String to JSON    {"detail": "Accepted", "status": 202, "task": {"created": "2022-04-08T00:14:37.641664", "id": "43917093-0633-4600-bbc7-c465d58cab4e", "status": "PENDING", "links": {"self": "/api/v1/tasks/43917093-0633-4600-bbc7-c465d58cab4e", "collection": "/api/v1/tasks"}}}
+        # The following line allows to test without sending data to DocDigitizer
+        # It creates a fake response to test the entire flow
+        # ${resp}    Convert String to JSON    {"detail": "Accepted", "status": 202, "task": {"created": "2022-04-08T00:14:37.641664", "id": "43917093-0633-4600-bbc7-c465d58cab4e", "status": "PENDING", "links": {"self": "/api/v1/tasks/43917093-0633-4600-bbc7-c465d58cab4e", "collection": "/api/v1/tasks"}}}
+        # Send to DocDigitizer
+        ${resp}    Send to DocDigitizer    ${invoiceName}
  
 
         Log    ${resp}
         #${respuesta}    Set Variable    ${resp.json()}
         ${task}    Set Variable    ${resp}[task]
-        Log    ${task}[id]
-        Log    ${task}[created]
-        Log    ${task}[status]
+        Log    ${task}[id] ${task}[created] ${task}[status]
     
         Sleep    10
 
@@ -85,24 +84,15 @@ Read Invoices from AirTable
         ...             taskID               ${task}[id]        
 
         ${json}            Convert JSON to String   ${row}
-        ${jsonFilaAir}     Set Variable    {"fields":${json}, "typecast": true\}
-        ${jsonFilaAir}     Set Variable    {"records":[{"id": "${idAirTable}", "fields":${json}, "typecast": true\}\]\}
-        ${jsonFilaAir}     Set Variable    {"records":[{\"id\": "${idAirTable}", \"fields\": {"taskID": "d1b602ef-0366-4347-a80f-18348a00cdd0"}, "typecast": true\}\]\}
         ${jsonFilaAir}     Set Variable    {"records":[{\"id\": "${idAirTable}", \"fields\": {"Status": "New", "taskID": "${task}[id]"}}\]\}
         Log     ${jsonFilaAir}
 
         ${datos}=    Convert String to JSON     ${jsonFilaAir}
 
-        Log     Actualizar registro
+        Log     Update row in Airtable
         #${resp}=    Patch Request    Airtable    ${INVOICES_API_URL}/${idAirTable}    json=${datos}
         ${resp}=    PATCH On Session    Airtable    ${API_URL}    json=${datos}
         Should Be Equal As Strings    ${resp.status_code}    200
-        ${jsondata}=    To Json    ${resp.content}
-
-
-        #${resp}    Insert into Airtable    ${file}[1]    ${task}[id]    ${respDocument}[id]
-        #${jsondata}=    Set Variable    ${resp.json()}
-        #Log    ${resp}
 
     END     
 

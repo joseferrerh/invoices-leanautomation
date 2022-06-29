@@ -1,5 +1,5 @@
 *** Settings ***
-Documentation     Recibe una factura en formato base64 y la envia a docDigitizer y a airTable
+Documentation     Send Invoice to DocDigitizer. Save the relevant data in Airtable
 Library           RPA.HTTP
 Library           RPA.core.notebook
 Library           RPA.JSON
@@ -26,7 +26,7 @@ Send Invoice to docDigit
     ${file}=  Get File For Streaming Upload  output${/}${payload}[invoiceName]
 
     Sleep    5
-#    &{files}=  Create Dictionary  files  ${payload}[invoiceName]
+    # &{files}=  Create Dictionary  files  ${payload}[invoiceName]
     &{files}=  Create Dictionary  
     ...    files    ${file}
 
@@ -49,7 +49,8 @@ Send Invoice to docDigit
     #Log    ${respDocument}[id]
     #Log    ${respDocument}[annotations][data]
 
-    # Esta es la llamada en la que se informaba el ID de la tarea y el ID del documento
+    # The following call inserts the information in the Airtable repository
+    # This is the old way, when a document ID was retrieved
     # ${resp}    Insert into Airtable    ${payload}[invoiceName]   ${task}[id]    ${respDocument}[id]    ${payload}[InvoiceId]    ${payload}[urlCreatio]
     ${resp}    Insert into Airtable    ${API_URL}    ${payload}[invoiceName]   ${task}[id]    ${payload}[invoiceId]    ${payload}[urlCreatio]
     #${jsondata}=    Set Variable    ${resp.json()}
