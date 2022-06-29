@@ -7,7 +7,6 @@ Library           RPA.FileSystem
 Library           OperatingSystem
 Library           String
 Library           Collections
-Library           docdigi_post_request
 Resource          res_airtable.robot
 Resource          res_docdigitizer.robot
 #Suite Setup       Setup

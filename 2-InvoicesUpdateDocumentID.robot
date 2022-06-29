@@ -7,7 +7,6 @@ Library           RPA.FileSystem
 Library           OperatingSystem
 Library           String
 Library           Collections
-Library           docdigi_post_request
 Resource          res_airtable.robot
 Resource          res_docdigitizer.robot
 #Suite Setup       Setup
@@ -68,7 +67,7 @@ Invoices Update DocumentID in AirTable
 
         ${datos}=    Convert String to JSON     ${jsonFilaAir}
 
-        Log     Actualizar registro
+        Log     Update Airtable rcord
         #${resp}=    Patch Request    Airtable    ${INVOICES_API_URL}/${idAirTable}    json=${datos}
         ${resp}=    PATCH On Session    Airtable    ${API_URL}    json=${datos}
         Should Be Equal As Strings    ${resp.status_code}    200

@@ -21,7 +21,7 @@ Send Invoice to docDigit
     ${API_URL}    Create Session Airtable
     Create Session DocDigitizer
 
-    saveFileBase64    output${/}${payload}[invoiceName]    ${payload}[invoiceContent]
+    Save File Base64    output${/}${payload}[invoiceName]    ${payload}[invoiceContent]
 
     ${file}=  Get File For Streaming Upload  output${/}${payload}[invoiceName]
 

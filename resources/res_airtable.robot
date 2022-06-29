@@ -36,7 +36,7 @@ Update Airtable Record
     ...           currency                 ${invoiceData}[document:financial-document:currency]
     ...           amountRounding           ${invoiceData}[document:financial-document:amount_rounding]
     ...           amountTotal              ${invoiceData}[document:financial-document:amount_total]
-    ...           amountBaseTotal          ${invoiceData}[document:financial-document:amout_base_total]
+    ...           amountBaseTotal          ${invoiceData}[document:financial-document:amount_base_total]
     ...           amountDue                ${invoiceData}[document:financial-document:amount_due]
     ...           recipientName            ${invoiceData}[document:financial-document:recipient_name]
     ...           amountTaxTotal           ${invoiceData}[document:financial-document:amount_tax_total]
