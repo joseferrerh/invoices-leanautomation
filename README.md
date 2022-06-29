@@ -1,35 +1,33 @@
-# Robocorp project to deal with invoices, send them to docDigitizer, obtain the data from their webservice and save it into an AirTable repository
+# Robocorp project to ingest invoices, send them to docDigitizer, obtain the data from their webservice and save it to an Airtable repository
 
 This project provides support for docDigitizer webService, in order to:
 
-  - receive/deal with invoices in pdf or any other format
-  - send them to docDigitizer and obtain a taskID
-  - query docDigitizer to obtain the documentID related to the taskID
-  - query again docDigitizer to obtain the document Details
+  - Receive / ingest invoices in PDF or any other format
+  - Send them to DocDigitizer and obtain a taskID
+  - Query DocDigitizer to obtain the documentID related to the taskID
+  - Query DocDigitizer again to obtain the document Details
 
-Invoices are also saved and registered into an AirTable repository.
+Invoices are also saved and registered into an Airtable repository.
 
 ## Requirements
 
-To operate and work with AirTable an API_KEY is required. It must be included into the Control Room:
+An API_KEY is required to work with Airtable and must be included in Control Room:
 
-  - A secret must exist called AirTable and must include API_KEY and API_URL
-  - The API_KEY is provided by AirTable, in the API documentation. No need to include the word Bearer with the API_KEY
-  - The API_URL can be obtained after registering into AirTable and replicating the following repository
-      [URL-to-Replicate](https://airtable.com/shr0TBDM6vP64E81B/tbl9dHJQVF4jV90QY) 
-  - After replicating the Invoice environment a URL will be provided by AirTable and must be included in the secret
-      The following is an example URL in our secret: /appAbC123xYz987AZ/Invoices
+  - A vault secret must exist called AirTable and must include API_KEY and API_URL
+  - The API_KEY is provided by Airtable, in the API documentation. There is no need to include the word Bearer with the API_KEY
+  - The API_URL can be obtained after registering into AirTable and replicating the [URL-to-Replicate](https://airtable.com/shr0TBDM6vP64E81B/tbl9dHJQVF4jV90QY) repository
+  - After replicating the Invoice environment, Airtable will provide a URL that must be included in the secret. The following is an example URL in our secret: /appAbC123xYz987AZ/Invoices
 
-To operate and work with docDigitizer an API_KEY is also required. It must be included into de control room:
+To operate and work with docDigitizer, an API_KEY is also required and must be included in the Control Room:
 
   - A secret called DocDigitizer must exists and with the key API_KEY
 
 ## Tasks
 
-> The following tasks are included as different ways to feed the invoices into the system. The most common ways to incorporate invoices into the system are:
+> The following tasks are different ways to feed invoices into the system. The most common ways to incorporate invoices into the system are:
 
-  - Obtaining them from an emailbox.
   - Reading them from a folder
+  - Obtaining them from an email box.
 
 There are two robots that implement these use-cases:
 
@@ -42,11 +40,11 @@ This robot reads the file in a folder and send them to DocDigitizer to obtain th
 
 Configuration required:
   - "INVOICES_DIR": "Invoices"
-  - This variable %{INVOICES_DIR} must be configured in the Robocorp Cloud for this step 
+  - This variable %{INVOICES_DIR} must be configured in Robocorp Cloud for this step 
 
 ### Invoices From Mailbox
 
-This is a very simple robot that access a mailbox, reads the emails with subject including the word "Invoice" and downloads the attachments to the previous forlder. 
+This robot accesses a mailbox, reads emails with a subject including the word "Invoice", and then downloads the attachments to the previous folder. 
 
 Configuration required. The following variables must be configured in the Robocorp Cloud for this step :
   - "MAILSERVER": "imap.server.com"
@@ -54,17 +52,13 @@ Configuration required. The following variables must be configured in the Roboco
   - "MAILBOX": "mail@domain.com"
   - "INVOICES_DIR": "Invoices"
 
-> An additional task is included for those cases in which the invoices have been included into AirTable with STATUS=New and with the Invoices Files included as attachments.
-
 ### Invoices From AirTable
 
-This task is used if you allow the user to upload the invoices directly to AirTable. Those invoices must be sent to DocDigitizer
-
-They are retrieved from AirTable, the pdf file is donwloaded and a request with that invoice file is send to DocDigitizer
+Use this task if your users upload invoices directly to Airtable. Those invoices are retrieved from Airtable, the PDF file is downloaded, and a request with that invoice file is then sent to DocDigitizer.
 
 ## Scheduled Tasks
 
-Once the invoices has been sent to docDigitizer, two tasks are executed under an schedule:
+Once invoices are sent to DocDigitizer, two tasks are executed under an schedule:
 
   - Invoices Update DocumentID in AirTable
   - Invoices Update Document Details in AirTable
@@ -78,7 +72,7 @@ Two tasks are provided to be used as an API
 
   - Send Invoice to docDigitizer
 
-  The payload to make use of this webservice is the following one:
+  The payload to make use of this web service is as follows:
 
     "payload": {
         "invoiceName": "invoice_filename.pdf",

@@ -112,7 +112,8 @@ POST Contents to Creatio
     ...    amount_due            ${data}[document:financial-document:amount_due]
 
 
-    #${resp}    POST        https://118762-crm-bundle.creatio.com/0/ServiceModel/RPARobocorpInvoice.svc/InvoiceResponse
+    # El POST a creatio se realiza a la siguiete URL 
+    # ${resp}    POST        https://118762-crm-bundle.creatio.com/0/ServiceModel/RPARobocorpInvoice.svc/InvoiceResponse
     ${response}    POST On Session    creatio    /InvoiceResponse    json=${invoice_data}
     
     [Return]    ${response}
